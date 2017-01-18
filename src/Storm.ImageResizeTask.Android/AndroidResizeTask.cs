@@ -3,64 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
 
 namespace Storm.ImageResizeTask.Android
 {
-    public abstract class BaseResizeTask<TImageInfo> : Task where TImageInfo : IImageInfo
-    {
-		[Required]
-		public ITaskItem[] InputImages { get; set; }
-
-		[Output]
-		public ITaskItem[] OutputImages { get; set; }
-
-	    public override bool Execute()
-	    {
-		    if (InputImages == null || InputImages.Length == 0)
-		    {
-			    return true;
-		    }
-
-		    try
-		    {
-			    Dictionary<string, List<TImageInfo>> groupedItems = new Dictionary<string, List<TImageInfo>>();
-			    foreach (ITaskItem inputImage in InputImages)
-			    {
-				    string id = GetIdentifierForImage(inputImage.ItemSpec);
-
-				    if (!groupedItems.ContainsKey(id))
-				    {
-					    groupedItems.Add(id, new List<TImageInfo>());
-				    }
-
-				    TImageInfo imageInfo = GetImageInformation(inputImage);
-				    imageInfo.Item = inputImage;
-				    groupedItems[id].Add(imageInfo);
-			    }
-
-			    foreach (KeyValuePair<string, List<TImageInfo>> pair in groupedItems)
-			    {
-				    AddMissingImageFormats(pair.Key, pair.Value);
-			    }
-
-
-		    }
-		    catch (Exception ex)
-		    {
-			    Log.LogError(ex.ToString());
-		    }
-
-		    return !Log.HasLoggedErrors;
-	    }
-
-	    protected abstract string GetIdentifierForImage(string filePath);
-
-	    protected abstract TImageInfo GetImageInformation(ITaskItem image);
-
-		protected abstract void AddMissingImageFormats(string id, List<TImageInfo> images);
-    }
-
 	public class AndroidResizeTask : BaseResizeTask<AndroidImageInfo>
 	{
 		private static readonly List<Tuple<string, AndroidImageSize>> SuffixForSizes = new List<Tuple<string, AndroidImageSize>>
@@ -172,61 +117,4 @@ namespace Storm.ImageResizeTask.Android
 			throw new InvalidOperationException($"No size available for directory {directory}");
 		}
 	}
-
-	public interface IImageInfo
-	{
-		double SizeFactor { get; }
-		
-		ITaskItem Item { get; set; }
-
-		string Output { get; }
-	}
-
-	public class AndroidImageInfo : IImageInfo
-	{
-		public AndroidImageSize Size { get; set; }
-		
-		public double SizeFactor
-		{
-			get
-			{
-				switch (Size)
-				{
-					case AndroidImageSize.Ldpi:
-						return 0.75;
-					case AndroidImageSize.Mdpi:
-						return 1;
-					case AndroidImageSize.Tvdpi:
-						return 4/3.0;
-					case AndroidImageSize.Hdpi:
-						return 1.5;
-					case AndroidImageSize.Xhdpi:
-						return 2;
-					case AndroidImageSize.Xxhdpi:
-						return 3;
-					case AndroidImageSize.Xxxhdpi:
-						return 4;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
-		}
-
-		public ITaskItem Item { get; set; }
-
-		public string Output { get; set; }
-	}
-
-	public enum AndroidImageSize
-	{
-		None,
-		Ldpi, //0.75 x mdpi
-		Mdpi, // 1
-		Tvdpi, // 1.33 x mdpi
-		Hdpi, //  1.5 x mdpi
-		Xhdpi, // 2 x mdpi
-		Xxhdpi, // 3 x mdpi
-		Xxxhdpi // 4 x mdpi
-	}
 }
-
