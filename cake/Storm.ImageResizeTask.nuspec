@@ -6,12 +6,12 @@
 		<title>{id}</title>
 		<authors>{author}</authors>
 		<owners>{author}</owners>
-		<licenseUrl>https://github.com/Julien-Mialon/StormCrossLocalization/blob/master/LICENSE</licenseUrl>
-		<projectUrl>https://github.com/Julien-Mialon/StormCrossLocalization</projectUrl>
+		<licenseUrl>https://github.com/Julien-Mialon/Storm.ImageResizeTask/blob/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/Julien-Mialon/Storm.ImageResizeTask</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>Pre compilation task to help Localization on cross platform mobile app.</description>
+		<description>Pre compilation msbuild/xbuild task to resize image for android apps.</description>
 		<releaseNotes>Initial release.</releaseNotes>
-		<copyright>Copyright 2016</copyright>
-		<tags>localization mvvm android ios wp pcl xamarin</tags>
+		<copyright>Copyright 2017</copyright>
+		<tags>xamarin android image resource msbuild xbuild</tags>
 	</metadata>
 </package>

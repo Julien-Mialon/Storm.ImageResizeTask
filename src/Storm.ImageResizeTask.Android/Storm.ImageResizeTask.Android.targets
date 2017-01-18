@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<UsingTask AssemblyFile="..\..\resize\Storm.ImageResizeTask.Android.dll"
+			   TaskName="Storm.ImageResizeTask.Android.AndroidResizeTask" />
+
+	<Target Name="ImageResizeTask" BeforeTargets="BeforeBuild">
+		<!--Execute resw transformation-->
+		<AndroidResizeTask InputImages="@(ResizableImage)">
+			<Output TaskParameter="OutputImages" ItemName="OutputResourceImages" />
+		</AndroidResizeTask>
+
+        <ItemGroup>
+            <AndroidResource Include="@(OutputResourceImages)" />
+        </ItemGroup>
+	</Target>
+</Project>

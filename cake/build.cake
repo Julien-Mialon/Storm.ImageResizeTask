@@ -1,21 +1,21 @@
-#addin "Cake.ExtendedNuGet"
-#addin "nuget:?package=NuGet.Core&version=2.12.0"
+//#addin "Cake.ExtendedNuGet"
+//#addin "nuget:?package=NuGet.Core&version=2.12.0"
 
 
 const string ROOT_PATH = "../src/";
-const string SOLUTION_PATH = ROOT_PATH + "StormCrossLocalization.sln";
+const string SOLUTION_PATH = ROOT_PATH + "Storm.ImageResizeTask.sln";
 const string ARTIFACTS_DIRECTORY = "../artifacts";
 const string DEPLOYMENT_DIRECTORY = "../build";
-const string DEPLOYMENT_TOOLS_DIRECTORY = DEPLOYMENT_DIRECTORY + "/localization";
+const string DEPLOYMENT_TOOLS_DIRECTORY = DEPLOYMENT_DIRECTORY + "/resize";
 const string DEPLOYMENT_BUILD_DIRECTORY = DEPLOYMENT_DIRECTORY + "/build";
 
-const string PCL_TFM = "netstandard1.0";
-const string WINPHONE_TFM = "win;wp;wp8;wp81;wpa81;uap";
+//const string PCL_TFM = "netstandard1.0";
+//const string WINPHONE_TFM = "win;wp;wp8;wp81;wpa81;uap";
 const string ANDROID_TFM = "monoandroid";
-const string IOS_TFM = "monotouch;xamarinios";
+//const string IOS_TFM = "monotouch;xamarinios";
 
 const string NUGET_NAME = "Storm.ImageResizeTask";
-const string NUGET_VERSION = "0.0.1";
+const string NUGET_VERSION = "0.1.0";
 const string NUGET_AUTHOR = "Julien Mialon";
 
 /* constants for target names */
@@ -29,19 +29,12 @@ const string DEFAULT_TARGET = BUILD;
 
 string[] LibProjects = new []
 {
-	"Localization.Core",
-	"Localization.PCL",
-	"Localization.Android",
-	"Localization.iOS",
-	"Localization.WindowsPhone"
+	"Storm.ImageResizeTask.Android"
 };
 
 Tuple<string, string>[] TFMForProjects = new []
 {
-	Tuple.Create("Localization.PCL", PCL_TFM),
-	Tuple.Create("Localization.Android", ANDROID_TFM),
-	Tuple.Create("Localization.iOS", IOS_TFM),
-	Tuple.Create("Localization.WindowsPhone", WINPHONE_TFM)
+	Tuple.Create("Storm.ImageResizeTask.Android", ANDROID_TFM)
 };
 
 var target = Argument("target", DEFAULT_TARGET);
@@ -107,6 +100,7 @@ Task(RELEASE)
 			Source = "https://www.nuget.org/api/v2/package",
 			ApiKey = EnvironmentVariable("NUGET_API_KEY") ?? ""
 		});
+		
 	});
 
 /* Restore tasks */
